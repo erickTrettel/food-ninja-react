@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
+import Routes from './routes'
 
 class Main extends Component {
   render() {
     return (
       <div>
-        <h1>Hello World</h1>
+        <Routes />
       </div>
     )
   }
