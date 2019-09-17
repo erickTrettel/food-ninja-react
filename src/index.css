@@ -5,3 +5,20 @@ body {
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
 }
+
+.login-box {
+  width: 70%;
+  margin: 0 auto;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.login-box .login-title {
+  font-size: 2em;
+  text-align: center;
+}
+
+.login-box .login-form {
+
+}
