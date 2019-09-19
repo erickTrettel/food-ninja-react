@@ -1,21 +1,25 @@
-import React from 'react'
+import React, { Component } from 'react'
+import Sidebar from './sidebar'
 
-function Navbar() {
-  return (
-    <div>
-      <ul className="nav bg-dark justify-content-end">
-        <li className="nav-item">
-          <a className="nav-link text-white" href="/home">Home</a>
-        </li>
-        <li className="nav-item">
-          <a className="nav-link text-white" href="/dashboard">Dashboard</a>
-        </li>
-        <li className="nav-item">
-          <a className="nav-link text-white-50" href="/login">Login</a>
-        </li>
-      </ul>
-    </div>
-  )
+class Navbar extends Component {
+  render() {
+    return (
+      <div>
+        <nav className="z-depth-0">
+          <div className="nav-wrapper container">
+            <a href="/">Food<span>Ninja</span></a>
+            <span className="right grey-text text-darken-1">
+              <i className="material-icons sidenav-trigger" 
+                data-target="side-menu"
+                style={{ cursor: 'pointer' }}>menu</i>
+            </span>
+          </div>
+        </nav>
+  
+        <Sidebar />
+      </div>
+    )
+  }
 }
 
 export default Navbar

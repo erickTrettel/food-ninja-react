@@ -1,7 +1,9 @@
 import React from 'react';
 import Main from './components/main/main'
 
-function App() {
+import './dependencies'
+
+const App = () => {
   return (
     <div id="app">
       <Main />
