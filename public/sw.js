@@ -1,10 +1,9 @@
-const staticCacheName = 'site-static-v5';
-const dynamicCacheName = 'site-dynamic-v8';
+const staticCacheName = 'site-static-v7';
+const dynamicCacheName = 'site-dynamic-v10';
 
 const assets = [
   '/',
   '/index.html',
-  '/js/app.js',
   '/js/ui.js',
   '/js/materialize.min.js',
   '/css/styles.css',
@@ -12,7 +11,7 @@ const assets = [
   '/img/dish.png',
   'https://fonts.googleapis.com/icon?family=Material+Icons',
   'https://fonts.gstatic.com/s/materialicons/v48/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2',
-  '/pages/fallback.html'
+  '/fallback.html'
 ];
 
 // cache size limit function
@@ -69,8 +68,20 @@ self.addEventListener('fetch', evt => {
             })
           });
         }).catch(() => {
-          if(evt.request.url.indexOf('.html') > -1) {
-            return caches.match('/pages/fallback.html');
+          if(evt.request.url.indexOf('/about') > -1) {
+            return caches.match('/fallback.html');
+          }
+
+          if(evt.request.url.indexOf('/contact') > -1) {
+            return caches.match('/fallback.html');
+          }
+
+          if(evt.request.url.indexOf('/home') > -1) {
+            return caches.match('/fallback.html');
+          }
+
+          if(evt.request.url.indexOf('/') > -1) {
+            return caches.match('/fallback.html');
           }
           // NOTE: can also check for other file formats e.g. .png, .json, etc
         })
