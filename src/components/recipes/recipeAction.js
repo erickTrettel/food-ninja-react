@@ -1,5 +1,6 @@
 import axios from 'axios'
 import API from '../../consts'
+import { default as localforage } from 'localforage'
 
 const BASE_URL = API.API_URL
 
@@ -13,12 +14,27 @@ export const fetchRecipes = () => {
   return dispatch => {
     axios.get(`${BASE_URL}/recipes`)
       .then(res => {
+        // saving data on IndexedDB
+        localforage.setItem('recipes', res.data.data)
+          .catch(error => console.log("IndexedDB Error: ", error))
+
         return dispatch({
           type: 'FETCH_RECIPES',
           payload: res.data.data
         })
       })
-      .catch(error => console.log("Failed to fetch recipes: ", error))
+      .catch(error => {
+        // failed to fetch recipes from API
+        // retrieve data from IndexedDB
+        localforage.getItem('recipes')
+          .then(value => {
+            return dispatch({
+              type: 'FETCH_RECIPES',
+              payload: value
+            })
+          })
+          .catch(error => console.log("IndexedDB Error: ", error))
+      })
   }
 }
 

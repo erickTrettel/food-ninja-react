@@ -11,7 +11,14 @@ const assets = [
   '/img/dish.png',
   'https://fonts.googleapis.com/icon?family=Material+Icons',
   'https://fonts.gstatic.com/s/materialicons/v48/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2',
-  '/fallback.html'
+  '/fallback.html',
+  '/static/js/main.chunk.js',
+  '/static/js/bundle.js',
+  '/static/js/1.chunk.js',
+  '/static/js/0.chunk.js',
+  '/main.233eda56b79898b54a21.hot-update.js',
+  '/sockjs-node/info?t=1569007078543',
+  '/sockjs-node/info?t=1569007109149'
 ];
 
 // cache size limit function
@@ -54,7 +61,8 @@ self.addEventListener('activate', evt => {
 
 // fetch event
 self.addEventListener('fetch', evt => {
-  if(evt.request.url.indexOf('firestore.googleapis.com') === -1) {
+  // if making a request to the api then don't intercept
+  if(evt.request.url.indexOf('localhost:5000') === -1) {
     evt.respondWith(
       caches.match(evt.request)
         .then(cacheResponse => {
