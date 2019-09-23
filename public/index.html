@@ -38,18 +38,21 @@
     <!-- Localforage -->
     <script src="/js/localforage.min.js"></script>
     <script>
+      var requestStore
+      
       if('serviceWorker' in navigator) { // browser and informations about it
         navigator.serviceWorker.register('/sw.js')
           .catch((err) => console.log("service worker not registered", err));
       }
 
-      window.addEventListener('online', function(e) {
-        // FIXME: refactor to async-await
-        var requestStore = localforage.createInstance({
+      window.addEventListener('load', function(e) {
+        requestStore = localforage.createInstance({
           name: 'requests',
           storeName: 'requests' // Should be alphanumeric, with underscores.
         })
+      }, false);
 
+      window.addEventListener('online', function(e) {
         requestStore.keys()
           .then(keys => {
             keys.forEach(key => {
