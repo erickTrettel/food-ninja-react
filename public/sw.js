@@ -1,5 +1,6 @@
 const staticCacheName = 'site-static-v7';
 const dynamicCacheName = 'site-dynamic-v10';
+const apiBaseUrl = 'localhost:5000'
 
 const assets = [
   '/',
@@ -61,7 +62,7 @@ self.addEventListener('activate', evt => {
 // fetch event
 self.addEventListener('fetch', evt => {
   // if making a request to the api then don't intercept
-  if(evt.request.url.indexOf('localhost:5000') === -1) {
+  if(evt.request.url.indexOf(apiBaseUrl) === -1) {
     evt.respondWith(
       caches.match(evt.request)
         .then(cacheResponse => {
@@ -75,6 +76,7 @@ self.addEventListener('fetch', evt => {
             })
           });
         }).catch(() => {
+          // for each route the user may try, we must have an if statement like so
           if(evt.request.url.indexOf('/about') > -1) {
             return caches.match('/fallback.html');
           }

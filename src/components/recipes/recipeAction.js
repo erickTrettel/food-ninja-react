@@ -1,6 +1,7 @@
 import axios from 'axios'
 import API from '../../consts'
-import { default as localforage } from 'localforage'
+import localforage from 'localforage'
+import uuid from 'uuid'
 
 const BASE_URL = API.API_URL
 
@@ -10,12 +11,35 @@ export const temp = () => {
   }
 }
 
+const setRecipes = recipes => {
+  return dispatch => {
+    const recipeStore = localforage.createInstance({
+      name: "recipes",
+      storeName: 'recipes' // Should be alphanumeric, with underscores.
+    });
+
+    // update the recipes on the indexeddb
+    recipeStore.setItem('recipes', recipes)
+      .catch(error => console.log("IndexedDB Error: ", error))
+
+    return dispatch({
+      type: 'FETCH_RECIPES',
+      payload: recipes
+    })
+  }
+}
+
 export const fetchRecipes = () => {
   return dispatch => {
+    const recipeStore = localforage.createInstance({
+      name: "recipes",
+      storeName: 'recipes' // Should be alphanumeric, with underscores.
+    });
+
     axios.get(`${BASE_URL}/recipes`)
       .then(res => {
         // saving data on IndexedDB
-        localforage.setItem('recipes', res.data.data)
+        recipeStore.setItem('recipes', res.data.data)
           .catch(error => console.log("IndexedDB Error: ", error))
 
         return dispatch({
@@ -26,7 +50,7 @@ export const fetchRecipes = () => {
       .catch(error => {
         // failed to fetch recipes from API
         // retrieve data from IndexedDB
-        localforage.getItem('recipes')
+        recipeStore.getItem('recipes')
           .then(value => {
             return dispatch({
               type: 'FETCH_RECIPES',
@@ -39,8 +63,21 @@ export const fetchRecipes = () => {
 }
 
 export const saveRecipe = recipe => {
-  return dispatch => {
-    axios.post(`${BASE_URL}/recipes`, { recipe })
+  return (dispatch, getState) => {
+    const requestStore = localforage.createInstance({
+      name: 'requests',
+      storeName: 'requests' // Should be alphanumeric, with underscores.
+    })
+
+    const options = {
+      method: 'post',
+      url: `${BASE_URL}/recipes`,
+      data: {
+        recipe
+      }
+    }
+
+    axios(options)
       .then(res => {
         if(res.error) {
           throw new Error('Failed to save recipe: ', res.data)
@@ -48,13 +85,30 @@ export const saveRecipe = recipe => {
 
         return dispatch(fetchRecipes())
       })
-      .catch(error => console.log("Failed to save recipe: ", error))
+      .catch(error => {
+        requestStore.setItem(uuid.v4(), options)
+
+        // update the recipes
+        const recipes = [...getState().recipe.recipes, recipe]
+
+        return dispatch(setRecipes(recipes))
+      })
   }
 }
 
 export const deleteRecipeById = id => {
-  return dispatch => {
-    axios.delete(`${BASE_URL}/recipes/${id}`)
+  return (dispatch, getState) => {
+    const requestStore = localforage.createInstance({
+      name: 'requests',
+      storeName: 'requests' // Should be alphanumeric, with underscores.
+    })
+    
+    const options = {
+      method: 'delete',
+      url: `${BASE_URL}/recipes/${id}`
+    }
+    
+    axios(options)
       .then(res => {
         if(res.error) {
           throw new Error('Failed to delete recipe: ', res.data)
@@ -62,7 +116,17 @@ export const deleteRecipeById = id => {
 
         return dispatch(fetchRecipes())
       })
-      .catch(error => console.log("Failed to delete recipe: ", error))
+      .catch(error => {
+        // store the request
+        requestStore.setItem(uuid.v4(), options)
+
+        // update the recipes
+        const recipes = getState().recipe.recipes.filter(recipe => {
+          return recipe.id !== id
+        })        
+
+        return dispatch(setRecipes(recipes))
+      })
   }
 }
 

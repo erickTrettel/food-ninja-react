@@ -31,11 +31,42 @@
     <!-- Materialize JS -->
     <script type="text/javascript" src="/js/materialize.min.js"></script>
     <script type="text/javascript" src="/js/ui.js"></script>
+    
+    <!-- Axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <!-- Localforage -->
+    <script src="/js/localforage.min.js"></script>
     <script>
       if('serviceWorker' in navigator) { // browser and informations about it
         navigator.serviceWorker.register('/sw.js')
           .catch((err) => console.log("service worker not registered", err));
       }
+
+      window.addEventListener('online', function(e) {
+        // FIXME: refactor to async-await
+        var requestStore = localforage.createInstance({
+          name: 'requests',
+          storeName: 'requests' // Should be alphanumeric, with underscores.
+        })
+
+        requestStore.keys()
+          .then(keys => {
+            keys.forEach(key => {
+              requestStore.getItem(key)
+                .then(request => {
+                  axios(request)
+                    .then(resp => {
+                      requestStore.removeItem(key)
+                        .catch(removeError => console.log("Failed to remove item: ", removeError))
+                    })
+                    .catch(reqError => console.log("Failed to make request: ", reqError))
+                })
+                .catch(error => console.log("Failed to get request: ", error))
+            })
+          })
+          .catch(err => console.log(err))
+      }, false);
     </script>
   </body>
 </html>
