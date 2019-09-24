@@ -73,3 +73,11 @@ input{
 form .input-field{
   margin-top: 30px;
 }
+
+.sidenav-animation {
+  -webkit-transition: all 0.15s ease-in;
+  -moz-transition: all 0.15s ease-in;
+  -ms-transition: all 0.15s ease-in;
+  -o-transition: all 0.15s ease-in;
+  transition: all 0.15s ease-in;
+}

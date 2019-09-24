@@ -6,6 +6,13 @@ import { bindActionCreators } from 'redux'
 import { fetchRecipes, saveRecipe } from '../recipes/recipeAction'
 
 class Home extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      isHidden: true
+    }
+  }
+
   componentWillMount() {
     this.props.fetchRecipes()
   }
@@ -41,6 +48,13 @@ class Home extends Component {
     })
   }
 
+  toggleMenu = () => {
+    this.setState({
+      ...this.state,
+      isHidden: !this.state.isHidden
+    })
+  }
+
   render() {
     return (
       <div id="home">
@@ -51,11 +65,11 @@ class Home extends Component {
   
         <div className="center">
           <a className="btn-floating btn-small btn-large add-btn sidenav-trigger" data-target="side-form">
-            <i className="material-icons">add</i>
+            <i className="material-icons" onClick={this.toggleMenu}>add</i>
           </a>
         </div>
   
-        <div id="side-form" className="sidenav side-form">
+        <div id="side-form" className="sidenav sidenav-animation side-form" style={{ transform: this.state.isHidden ? 'translateX(-105%)' : 'translateX(0%)' }}>
           <form className="add-recipe container section" onSubmit={this.handleSubmit}>
             <h6>New Recipe</h6>
             <div className="divider"></div>
@@ -72,6 +86,11 @@ class Home extends Component {
             </div>
           </form>
         </div>
+
+        <div class="sidenav-overlay" style={{ 
+            display: this.state.isHidden ? 'none' : 'block',
+            opacity: this.state.isHidden ? '0' : '1' }}
+            onClick={this.toggleMenu}></div>
       </div>
     )
   }

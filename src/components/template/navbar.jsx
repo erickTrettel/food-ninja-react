@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Sidebar from './sidebar'
+import { Link } from 'react-router-dom'
 
 class Navbar extends Component {
   render() {
@@ -7,7 +8,7 @@ class Navbar extends Component {
       <div>
         <nav className="z-depth-0">
           <div className="nav-wrapper container">
-            <a href="/">Food<span>Ninja</span></a>
+            <Link to="/">Food<span>Ninja</span></Link>
             <span className="right grey-text text-darken-1">
               <i className="material-icons sidenav-trigger" 
                 data-target="side-menu"

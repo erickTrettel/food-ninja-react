@@ -1,5 +1,3 @@
-const recipes = document.querySelector('.recipes');
-
 document.addEventListener('DOMContentLoaded', function() {
   // nav menu
   const menus = document.querySelectorAll('.side-menu');
