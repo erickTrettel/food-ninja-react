@@ -13,6 +13,7 @@ const authReducer = (state = INITIAL_STATE, action) => {
         user: action.payload
       }
     case 'LOGOUT':
+      localStorage.removeItem('user')
       return {
         ...state,
         isAuthenticated: false,
