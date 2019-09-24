@@ -23,9 +23,14 @@ export const login = (user) => {
 
     axios.post(`${BASE_URL}/auth`, { user })
       .then(res => {
+        if(res.error) {
+          console.log("Failed to login: ", res)
+          return dispatch(temp())
+        }
+
         return dispatch({
           type: 'LOGIN',
-          payload: res.data.data
+          payload: res.data.data[0]
         })
       })
       .catch(error => {

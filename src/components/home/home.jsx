@@ -87,7 +87,7 @@ class Home extends Component {
           </form>
         </div>
 
-        <div class="sidenav-overlay" style={{ 
+        <div className="sidenav-overlay" style={{ 
             display: this.state.isHidden ? 'none' : 'block',
             opacity: this.state.isHidden ? '0' : '1' }}
             onClick={this.toggleMenu}></div>
