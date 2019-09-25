@@ -40,9 +40,7 @@ class Home extends Component {
     return recipes.map(recipe => {
       return (
         <Recipe key={recipe.id} 
-          id={recipe.id} 
-          title={recipe.title} 
-          ingredients={recipe.ingredients}
+          recipe={recipe}
           fetchRecipes={() => this.props.fetchRecipes()} />
       )
     })

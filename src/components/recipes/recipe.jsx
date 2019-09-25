@@ -4,18 +4,38 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { deleteRecipeById } from './recipeAction'
 
+import firebase from '../../config/fbConfig'
+
 class Recipe extends Component {
+  componentWillMount() {
+    const { id, image } = this.props.recipe
+    const blobUrl = image ? image : null
+
+    const imgId = 'img-' + id
+
+    if(blobUrl) {
+      const storageRef = firebase.storage().ref(blobUrl)
+
+      storageRef.getDownloadURL()
+        .then(url => {
+          console.log(url)
+          document.getElementById(imgId).src = url
+        })
+        .catch(error => console.log("Failed to get image: ", error))
+    }
+  }
+
   deleteRecipe = id => {
     this.props.deleteRecipeById(id)
     this.props.fetchRecipes()
   }
 
   render() {
-    const { id, title, ingredients } = this.props
+    const { id, title, ingredients } = this.props.recipe
 
     return (
       <div className="card-panel recipe white row" data-id={id}>
-        <img src="/img/dish.png" alt="recipe thumb" />
+        <img id={'img-' + id} src="/img/dish.png" alt="recipe thumb" />
         <div className="recipe-details">
           <div className="recipe-title">{title}</div>
           <div className="recipe-ingredients">{ingredients}</div>
