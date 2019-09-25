@@ -17,18 +17,29 @@ class Login extends React.Component {
     this.props.login(user)
   }
 
+  
   render() {
+    const loginBoxStyles = {
+      margin: '0 auto',
+      width: '500px',
+      maxWidth: '100%',
+      background: '#fff',
+      padding: '10px',
+      marginTop: '10vh',
+      borderRadius: '5px',
+      boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)',
+      transition: '0.3s'
+    }
+
     if(this.props.auth.isAuthenticated) return <Redirect to="/" />
 
     return (
-      <div className="login-box">
+      <div className="login-box" style={loginBoxStyles}>
         <div className="login-title">
           <h4 style={{ textAlign: 'center', color: '#999' }}>Login</h4>
         </div>
 
-        <div className="divider"></div>
-
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={this.handleSubmit} style={{ textAlign: 'center' }}>
           <div className="add-recipe container section">
             <div className="input-field">
               <input placeholder="example@mail.com" id="email" type="email" className="validate" />
@@ -40,7 +51,7 @@ class Login extends React.Component {
               <label htmlFor="password">Password</label>
             </div>
     
-            <button type="submit" className="btn btn-small">
+            <button type="submit" className="btn" style={{ backgroundColor: 'var(--title)' }}>
               Login
             </button>
           </div>

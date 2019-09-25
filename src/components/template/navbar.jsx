@@ -8,7 +8,7 @@ class Navbar extends Component {
       <div>
         <nav className="z-depth-0">
           <div className="nav-wrapper container">
-            <Link to="/">Food<span>Ninja</span></Link>
+            <a href="/">Food<span>Ninja</span></a>
             <span className="right grey-text text-darken-1">
               <i className="material-icons sidenav-trigger" 
                 data-target="side-menu"

@@ -4,6 +4,7 @@ const apiBaseUrl = 'localhost:5000'
 
 const assets = [
   '/',
+  '/home',
   '/index.html',
   '/js/ui.js',
   '/js/materialize.min.js',
@@ -35,7 +36,6 @@ const limitCacheSize = (name, size) => {
 
 // install service worker
 self.addEventListener('install', evt => {
-  // console.log("service worker has been installed");
   evt.waitUntil(
     caches.open(staticCacheName)
       .then(cache => {
@@ -46,12 +46,10 @@ self.addEventListener('install', evt => {
 
 // activate event
 self.addEventListener('activate', evt => {
-  // console.log("service worer has been activated");
   evt.waitUntil(
     caches.keys()
       .then(keys => {
         // deleting old caches
-        // console.log(keys); 
         return Promise.all(keys
           .filter(key => key !== staticCacheName && key !== dynamicCacheName)
           .map(key => caches.delete(key)))

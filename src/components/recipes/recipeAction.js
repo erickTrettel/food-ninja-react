@@ -6,9 +6,9 @@ import firebase from '../../config/fbConfig'
 
 const BASE_URL = API.API_URL
 
-export const temp = () => {
+export const nop = () => {
   return {
-    type: 'TEMP'
+    type: 'NOP'
   }
 }
 
@@ -48,7 +48,7 @@ export const fetchRecipes = () => {
           payload: res.data.data
         })
       })
-      .catch(error => {
+      .catch(() => {
         // failed to fetch recipes from API
         // retrieve data from IndexedDB
         recipeStore.getItem('recipes')
@@ -142,7 +142,7 @@ export const deleteRecipeById = id => {
 
         return dispatch(fetchRecipes())
       })
-      .catch(error => {
+      .catch(() => {
         // store the request
         requestStore.setItem(uuid.v4(), options)
 
