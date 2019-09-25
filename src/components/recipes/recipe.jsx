@@ -8,17 +8,18 @@ import firebase from '../../config/fbConfig'
 
 class Recipe extends Component {
   componentWillMount() {
-    const { id, image } = this.props.recipe
-    const blobUrl = image ? image : null
+    this.loadRecipeImg()
+  }
 
+  loadRecipeImg = () => {
+    const { id, image } = this.props.recipe
     const imgId = 'img-' + id
 
-    if(blobUrl) {
-      const storageRef = firebase.storage().ref(blobUrl)
+    if(image) {
+      const storageRef = firebase.storage().ref(image)
 
       storageRef.getDownloadURL()
         .then(url => {
-          console.log(url)
           document.getElementById(imgId).src = url
         })
         .catch(error => console.log("Failed to get image: ", error))

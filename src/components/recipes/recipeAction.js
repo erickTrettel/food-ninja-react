@@ -2,6 +2,7 @@ import axios from 'axios'
 import API from '../../consts'
 import localforage from 'localforage'
 import uuid from 'uuid'
+import firebase from '../../config/fbConfig'
 
 const BASE_URL = API.API_URL
 
@@ -59,6 +60,31 @@ export const fetchRecipes = () => {
           })
           .catch(error => console.log("IndexedDB Error: ", error))
       })
+  }
+}
+
+export const saveImage = (blob, blobName) => {
+  return dispatch => {
+    // create a storage ref
+    const storageRef = firebase.storage().ref(blobName)
+
+    // upload file
+    const task = storageRef.put(blob)
+
+    // upload progress bar
+    task.on('state_changed', 
+      function progress(snapshot) {
+        
+      },
+
+      function error(err) {
+        
+      },
+
+      function complete() {
+        return dispatch(fetchRecipes())
+      }
+    );
   }
 }
 

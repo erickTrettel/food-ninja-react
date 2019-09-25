@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import Recipe from '../recipes/recipe'
+import uuid from 'uuid'
 
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { fetchRecipes, saveRecipe } from '../recipes/recipeAction'
+import { fetchRecipes, saveRecipe, saveImage } from '../recipes/recipeAction'
 
 class Home extends Component {
   constructor(props) {
@@ -20,14 +21,27 @@ class Home extends Component {
   handleSubmit = e => {
     e.preventDefault()
 
+    const file = e.target.file.files[0]
+    let blobName
+
+    if(file) {
+      const fileExtension = this.getFileExtension(file.name)
+      blobName = 'recipes_imgs/' + uuid.v4() + fileExtension
+      this.props.saveImage(e.target.file.files[0], blobName)
+    }
+
     const recipe = {
       title: e.target.title.value,
-      ingredients: e.target.ingredients.value
+      ingredients: e.target.ingredients.value,
+      image: blobName || null
     }
 
     this.props.saveRecipe(recipe)
-
     this.clearForm()
+  }
+
+  getFileExtension(fileName) {
+    return fileName.substring(fileName.lastIndexOf('.'))
   }
 
   clearForm = () => {
@@ -79,6 +93,11 @@ class Home extends Component {
               <input placeholder="e.g. Tofu, mushroom, garlic" id="ingredients" type="text" className="validate" />
               <label htmlFor="ingredients">Ingredients</label>
             </div>
+            <h6>Image</h6>
+            <div className="divider"></div>
+            <div className="input-field">
+              <input type="file" id="file" className="form-control" />
+            </div>
             <div className="input-field center">
               <button className="btn-small">Add</button>
             </div>
@@ -99,6 +118,10 @@ const mapStateToProps = state => {
   }
 }
 
-const mapDispatchToProps = dispatch => bindActionCreators({ fetchRecipes, saveRecipe }, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({
+  fetchRecipes, 
+  saveRecipe, 
+  saveImage 
+}, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home)
