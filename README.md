@@ -17,7 +17,7 @@ Seguindo esse tutorial, você será capaz de criar um **Progressive Web App** do
 O [**Manifest**](https://developers.google.com/web/fundamentals/web-app-manifest) é um arquivo no formato JSON que funciona como uma "etiqueta" para o navegador com informações sobre sua aplicação. <br>
 Deve seguir o seguinte formato:<br>
 
-`
+```
 {
   "short_name": "Maps",
   "name": "Google Maps",
@@ -39,7 +39,7 @@ Deve seguir o seguinte formato:<br>
   "scope": "/maps/",
   "theme_color": "#3367D6"
 }
-`
+```
 
 Após criar seu arquivo manifest.json, você deve referenciá-lo no seu arquivo **index.html**: <br>
 
@@ -53,10 +53,10 @@ Para otimizar seu PWA, você pode também adicionar as seguintes tags:<br>
 
 Para iOS:
 
-`
+```
 <link rel="apple-touch-icon" href="/icons/icons-96x96.png">
 <meta name="apple-mobile-web-app-status-bar" content="#aa7700">
-`
+```
 
 ### Service workers
 
@@ -65,9 +65,9 @@ Service workers são scripts que rodam em paralelo com sua aplicação e executa
 
 Para registrar um novo service worker:
 
-`
+```
 if('serviceWorker' in navigator) { 
   navigator.serviceWorker.register('/sw.js')
     .catch((err) => console.log("service worker not registered", err));
 }
-`
+```
